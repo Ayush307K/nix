@@ -48,7 +48,10 @@ EvalSettings::EvalSettings(bool & readOnlyMode, EvalSettings::LookupPathHooks lo
     : readOnlyMode{readOnlyMode}
     , lookupPathHooks{lookupPathHooks}
 {
-    auto var = getEnv("NIX_ABORT_ON_WARN");
+    auto var = getEnv("NIX_PATH");
+    if (var) nixPath = parseNixPath(*var);
+
+    var = getEnv("NIX_ABORT_ON_WARN");
     if (var && (var == "1" || var == "yes" || var == "true"))
         builtinsAbortOnWarn = true;
 }
